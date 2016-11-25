@@ -41,12 +41,17 @@ def gen(word: str):
     for i in range(length):
         new_word += chr(random.randint(ord('a'), ord('z')))
 
+    if all_upper:
+        new_word = new_word.upper()
+    elif first_upper:
+        new_word = new_word[0].upper() + new_word[1:]
+
     words[word] = new_word
     return new_word
 
 
 statements = '''
-A, fairy tale is a type of short story that typically features folkloric fantasy characters, such as dwarves, elves,
+A, Fairy TALE is a type of short story that typically features folkloric fantasy characters, such as dwarves, elves,
 fairies, giants, gnomes, goblins, mermaids, trolls, unicorns, or witches, and usually magic or enchantments.
 Fairy tales may be distinguished from other folk narratives such as legends (which generally involve belief in the
 veracity of the events described)[1] and explicitly moral tales, including beast fables. The term is mainly used for
