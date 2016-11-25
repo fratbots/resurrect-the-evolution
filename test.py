@@ -1,13 +1,27 @@
 import collections
 import random
 import re
+import zlib
 from pprint import pprint as pp
 
 Token = collections.namedtuple('Token', ['type', 'value', 'line', 'column'])
 
 
-def gen(word: str) -> str:
-    return '1'
+
+def gen(word: str):
+    syllables = [
+        'la',
+        'ko',
+        'pep',
+        'qwu',
+        'e',
+        'plo',
+        'kuo',
+    ]
+
+    # random.seed('uprt' + word)
+    new_word_syllables = random.sample(syllables, (zlib.crc32(word.encode()) % 3) + 1)
+    return ''.join(new_word_syllables)
 
 
 def tokenize(code):
