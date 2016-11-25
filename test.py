@@ -1,6 +1,7 @@
 import collections
 import random
 import re
+import zlib
 
 Token = collections.namedtuple('Token', ['type', 'value', 'line', 'column'])
 
@@ -28,26 +29,21 @@ def tokenize(code):
 
 words = {}
 
+syllables = [
+    'la',
+    'ko',
+    'pep',
+    'qwu',
+    'e',
+    'plo',
+    'kuo',
+]
 
 def gen(word: str):
-    if word in words:
-        return words[word]
-    # todo generate
-    length = len(word)
-    all_upper = word.upper() == word
-    first_upper = word[0].upper() == word[0]
+    random.seed('uprt' + word)
 
-    new_word = ''
-    for i in range(length):
-        new_word += chr(random.randint(ord('a'), ord('z')))
-
-    if all_upper:
-        new_word = new_word.upper()
-    elif first_upper:
-        new_word = new_word[0].upper() + new_word[1:]
-
-    words[word] = new_word
-    return new_word
+    new_word_syllables = random.sample(syllables, (zlib.crc32(word.encode()) % 3) + 1)
+    return ''.join(new_word_syllables)
 
 
 statements = '''
@@ -57,8 +53,6 @@ Fairy tales may be distinguished from other folk narratives such as legends (whi
 veracity of the events described)[1] and explicitly moral tales, including beast fables. The term is mainly used for
 stories with origins in European tradition and, at least in recent centuries, mostly relates to children's literature.
 '''
-
-random.seed('uprt')
 
 print(statements)
 
