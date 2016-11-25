@@ -1,8 +1,13 @@
 import collections
 import random
 import re
+from pprint import pprint as pp
 
 Token = collections.namedtuple('Token', ['type', 'value', 'line', 'column'])
+
+
+def gen(word: str) -> str:
+    return '1'
 
 
 def tokenize(code):
@@ -26,31 +31,28 @@ def tokenize(code):
             yield Token(kind, value, line_num, column)
 
 
-words = {}
+def translate(text: str) -> str:
+    result = []
+    words = {}
+    for token in tokenize(text):
+        if token.type == 'WORD':
+            word = token.value
+            if word in words:
+                new_word = words[word]
+            else:
+                new_word = gen(word.lower())
+            if word.isupper():
+                new_word = new_word.upper()
+            elif word.istitle():
+                new_word = new_word.title()
+            result.append(new_word)
+        else:
+            result.append(token.value)
+
+    return ''.join(result), words
 
 
-def gen(word: str):
-    if word in words:
-        return words[word]
-    # todo generate
-    length = len(word)
-    all_upper = word.upper() == word
-    first_upper = word[0].upper() == word[0]
-
-    new_word = ''
-    for i in range(length):
-        new_word += chr(random.randint(ord('a'), ord('z')))
-
-    if all_upper:
-        new_word = new_word.upper()
-    elif first_upper:
-        new_word = new_word[0].upper() + new_word[1:]
-
-    words[word] = new_word
-    return new_word
-
-
-statements = '''
+text = '''
 A, Fairy TALE is a type of short story that typically features folkloric fantasy characters, such as dwarves, elves,
 fairies, giants, gnomes, goblins, mermaids, trolls, unicorns, or witches, and usually magic or enchantments.
 Fairy tales may be distinguished from other folk narratives such as legends (which generally involve belief in the
@@ -58,12 +60,9 @@ veracity of the events described)[1] and explicitly moral tales, including beast
 stories with origins in European tradition and, at least in recent centuries, mostly relates to children's literature.
 '''
 
-random.seed('uprt')
-
-print(statements)
-
-for token in tokenize(statements):
-    if token.type == 'WORD':
-        print(gen(token.value), end='')
-    else:
-        print(token.value, end='')
+if __name__ == '__main__':
+    random.seed('uprt')
+    print(text)
+    translated_text, words = translate(text)
+    print(translated_text)
+    pp(words)
