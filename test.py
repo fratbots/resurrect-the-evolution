@@ -1,4 +1,5 @@
 import collections
+import random
 import re
 
 Token = collections.namedtuple('Token', ['type', 'value', 'line', 'column'])
@@ -25,16 +26,24 @@ def tokenize(code):
             yield Token(kind, value, line_num, column)
 
 
-
 words = {}
 
-def gen(word):
+
+def gen(word: str):
     if word in words:
         return words[word]
     # todo generate
-    new_word = 'allal'
+    length = len(word)
+    all_upper = word.upper() == word
+    first_upper = word[0].upper() == word[0]
+
+    new_word = ''
+    for i in range(length):
+        new_word += chr(random.randint(ord('a'), ord('z')))
+
     words[word] = new_word
     return new_word
+
 
 statements = '''
 A, fairy tale is a type of short story that typically features folkloric fantasy characters, such as dwarves, elves,
@@ -44,10 +53,12 @@ veracity of the events described)[1] and explicitly moral tales, including beast
 stories with origins in European tradition and, at least in recent centuries, mostly relates to children's literature.
 '''
 
+random.seed('uprt')
+
+print(statements)
 
 for token in tokenize(statements):
     if token.type == 'WORD':
         print(gen(token.value), end='')
     else:
         print(token.value, end='')
-
