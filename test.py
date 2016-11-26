@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import random
+from lib.generator import generator
 
 import lib.lang
 from lib.tokenizer import *
@@ -42,7 +43,7 @@ if __name__ == '__main__':
     random.seed('uprt')
 
     # new language based on seed
-    lang = lib.lang.Language()
+    lang = lib.lang.Language(generator)
 
     # source text
     print(text)

@@ -40,7 +40,8 @@ CORRECTIONS = [CorrectionPreposition, CorrectionSuffix]
 
 
 class Language:
-    def __init__(self):
+    def __init__(self, generator):
+        self.generator = generator
         self.dictionary = {}  # word_base_eng => Word(word_base, gender)
         self.grammar = {}  # Trait(gender, countable) => correction
         for p in PARTS:
@@ -59,6 +60,13 @@ class Language:
                     #     Trait(gender=FEMALE, countable=PLURAL): CorrectionSuffix('esania'),
                     # }
 
+    def generate_root(self, word_eng_base):
+        while True:
+            new_root = self.generator.gen_root(word_eng_base)
+            if new_root in (word.word_base for _, word in self.dictionary.items()):
+                continue
+            return new_root
+
     def translate_word_token(self, token: Token) -> str:
         # countable     from    text
         # word          from    genetaor
@@ -71,7 +79,7 @@ class Language:
             word = self.dictionary[word_eng_base]
         else:
             new_gender = random.choice(GENDERS)
-            new_word_base = generator.gen_root(word_eng_base)
+            new_word_base = self.generate_root(word_eng_base)
             word = Word(part=token.part, word_base=new_word_base, gender=new_gender)
             self.dictionary[word_eng_base] = word
 
