@@ -1,3 +1,8 @@
+""" 
+nltk.download('wordnet')
+
+"""
+
 from nltk.stem import WordNetLemmatizer
 
 SINGULAR = 1
