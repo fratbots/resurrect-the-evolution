@@ -58,5 +58,5 @@ if __name__ == '__main__':
     print()
 
     # dictionary
-    # lib.lang.print_dictionary(lang)
-    # print()
+    lib.lang.print_dictionary(lang)
+    print()

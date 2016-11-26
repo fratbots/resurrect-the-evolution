@@ -13,7 +13,7 @@ class CorrectionPreposition:
         return self.prep + ' ' + base_word
 
     def __str__(self):
-        return '"{}" + _ + word'.format(self.prep)
+        return '"{} " + word'.format(self.prep)
 
 
 class CorrectionSuffix:
@@ -50,14 +50,14 @@ class Language:
                     correction = CorrectionNone() if p is None else random.choice(CORRECTIONS)()
                     self.grammar[trait] = correction
 
-        # self.grammar = {
-        #     Trait(gender=NEUTER, countable=SINGULAR): CorrectionPreposition('lol'),
-        #     Trait(gender=NEUTER, countable=PLURAL): CorrectionSuffix('es'),
-        #     Trait(gender=MALE, countable=SINGULAR): CorrectionSuffix(''),
-        #     Trait(gender=MALE, countable=PLURAL): CorrectionSuffix('esas'),
-        #     Trait(gender=FEMALE, countable=SINGULAR): CorrectionPreposition('la'),
-        #     Trait(gender=FEMALE, countable=PLURAL): CorrectionSuffix('esania'),
-        # }
+                    # self.grammar = {
+                    #     Trait(gender=NEUTER, countable=SINGULAR): CorrectionPreposition('lol'),
+                    #     Trait(gender=NEUTER, countable=PLURAL): CorrectionSuffix('es'),
+                    #     Trait(gender=MALE, countable=SINGULAR): CorrectionSuffix(''),
+                    #     Trait(gender=MALE, countable=PLURAL): CorrectionSuffix('esas'),
+                    #     Trait(gender=FEMALE, countable=SINGULAR): CorrectionPreposition('la'),
+                    #     Trait(gender=FEMALE, countable=PLURAL): CorrectionSuffix('esania'),
+                    # }
 
     def translate_word_token(self, token: Token) -> str:
         # countable     from    text
@@ -72,33 +72,49 @@ class Language:
         else:
             new_gender = random.choice(GENDERS)
             new_word_base = generator.gen_root(word_eng_base)
-            word = Word(word_base=new_word_base, gender=new_gender)
+            word = Word(part=token.part, word_base=new_word_base, gender=new_gender)
             self.dictionary[word_eng_base] = word
 
         correction = self.grammar[Trait(part=token.part, gender=word.gender, countable=word_eng_countable)]
         return correction.apply(word.word_base)
 
-    def get_word(self, eng_word_base, countable):
+    def correct_word(self, eng_word_base, part, countable):
         word = self.dictionary.get(eng_word_base)
         if word is None:
             return None
-        correction = self.grammar[Trait(gender=word.gender, countable=countable)]
+        correction = self.grammar[Trait(part=part, gender=word.gender, countable=countable)]
         return correction.apply(word.word_base)
 
 
 def print_dictionary(lang: Language):
-    items = []
-    for word_base, word in lang.dictionary.items():
-        items.append((
-            word_base,
-            word,
-            lang.get_word(word_base, SINGULAR).title(),
-            lang.get_word(word_base, PLURAL).title()
-        ))
-
-    for word_base, word, base_singular, base_plural in sorted(items, key=lambda t: t[2]):
-        print('{:<10} {:<8} plural: {:<10}  means: {}'.format(base_singular, GENDERS_NAMES[word.gender], base_plural,
-                                                              word_base.title()))
+    items = ((k, v, lang.correct_word(k, v.part, SINGULAR).title()) for k, v in lang.dictionary.items())
+    for means, word, singular in sorted(items, key=lambda t: t[2]):
+        if word.part is not None:
+            if word.part == NOUN:
+                print(
+                    '{:<10} ({}, {}, plural: {}) means: {}'.format(
+                        singular.title(),
+                        PARTS_NAMES[word.part].title(),
+                        GENDERS_NAMES[word.gender].title(),
+                        lang.correct_word(means, word.part, PLURAL),
+                        means
+                    ),
+                )
+            else:
+                print(
+                    '{:<10} ({}) means: {}'.format(
+                        singular.title(),
+                        PARTS_NAMES[word.part].title(),
+                        means.title()
+                    ),
+                )
+        else:
+            print(
+                '{:<10} means: {}'.format(
+                    singular.title(),
+                    means.title()
+                )
+            )
 
 
 def print_grammar(lang: Language):

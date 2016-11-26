@@ -30,6 +30,6 @@ PARTS_NAMES = {
 
 Trait = collections.namedtuple('Trait', ['part', 'gender', 'countable'])
 
-Word = collections.namedtuple('Word', ['word_base', 'gender'])
+Word = collections.namedtuple('Word', ['part', 'word_base', 'gender'])
 
 Token = collections.namedtuple('Token', ['type', 'value', 'countable', 'part', 'word_base', 'line', 'column'])
