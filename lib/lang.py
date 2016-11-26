@@ -47,10 +47,8 @@ class Language:
             for g in GENDERS:
                 for c in COUNTABLE:
                     trait = Trait(part=p, gender=g, countable=c)
-                    if p is None:
-                        self.grammar[trait] = CorrectionNone()
-                    else:
-                        self.grammar[trait] = random.choice(CORRECTIONS)()
+                    correction = CorrectionNone() if p is None else random.choice(CORRECTIONS)()
+                    self.grammar[trait] = correction
 
         # self.grammar = {
         #     Trait(gender=NEUTER, countable=SINGULAR): CorrectionPreposition('lol'),
@@ -104,11 +102,14 @@ def print_dictionary(lang: Language):
 
 
 def print_grammar(lang: Language):
-    for g in GENDERS:
-        t_single = Trait(gender=g, countable=SINGULAR)
-        t_plural = Trait(gender=g, countable=PLURAL)
-        print('{:<10} singular: {:<20} plural: {:<20}'.format(
-            GENDERS_NAMES[g],
-            str(lang.grammar[t_single]),
-            str(lang.grammar[t_plural])
-        ))
+    for p in PARTS:
+        print(PARTS_NAMES[p])
+        for g in GENDERS:
+            t_single = Trait(part=p, gender=g, countable=SINGULAR)
+            t_plural = Trait(part=p, gender=g, countable=PLURAL)
+            print('{:<10} singular: {:<20} plural: {:<20}'.format(
+                GENDERS_NAMES[g],
+                str(lang.grammar[t_single]),
+                str(lang.grammar[t_plural])
+            ))
+        print()

@@ -20,7 +20,13 @@ NOUN = 1
 VERB = 2
 ADJECTIVE = 3
 
-PARTS = (None, NOUN, VERB, ADJECTIVE)
+PARTS = (NOUN, VERB, ADJECTIVE, None)
+PARTS_NAMES = {
+    NOUN: 'Noun',
+    VERB: 'Verb',
+    ADJECTIVE: 'Adjective',
+    None: 'Others'
+}
 
 Trait = collections.namedtuple('Trait', ['part', 'gender', 'countable'])
 
