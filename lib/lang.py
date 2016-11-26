@@ -49,7 +49,7 @@ def generate_new_word(word_eng_base: str):
 class Language:
     def __init__(self):
         self.dictionary = {}  # word_base_eng => Word(word_base, gender)
-        self.grammar = {}
+        self.grammar = {}  # Trait(gender, countable) => correction
         for g in GENDERS:
             for c in COUNTABLE:
                 self.grammar[Trait(gender=g, countable=c)] = random.choice(CORRECTIONS)()
