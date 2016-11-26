@@ -18,6 +18,7 @@ def tokenize(code):
         kind = mo.lastgroup
         value = mo.group(kind)
         countable, part, word_base = lemmatizer.get_countable_and_base(value)
+        word_base = word_base.lower()
         if kind == 'NEWLINE':
             line_start = mo.end()
             line += 1

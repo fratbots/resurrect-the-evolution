@@ -10,14 +10,19 @@ GENDERS_NAMES = {
     FEMALE: 'female',
     MALE: 'male'
 }
+GENDERS_NAMES_SHORT = {
+    NEUTER: 'neuter',
+    FEMALE: 'fem.',
+    MALE: 'male'
+}
 
 SINGULAR = 1
 PLURAL = 2
 
 COUNTABLE = (SINGULAR, PLURAL)
 COUNTABLE_NAMES = {
-    SINGULAR: 'singular',
-    PLURAL: 'plural'
+    SINGULAR: 's.',
+    PLURAL: 'pl.'
 }
 
 NOUN = 1

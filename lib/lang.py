@@ -61,7 +61,9 @@ class Language:
                     #     Trait(gender=FEMALE, countable=PLURAL): CorrectionSuffix('esania'),
                     # }
 
-    def generate_root(self, word_eng_base, part):
+    def generate_root(self, word_eng_base, part) -> str:
+        if word_eng_base in self.dictionary:
+            return self.dictionary[word_eng_base].word_base
         while True:
             new_root = self.generator.gen_root(word_eng_base, part)
             if new_root in (word.word_base for _, word in self.dictionary.items()):
@@ -72,10 +74,6 @@ class Language:
         # countable     from    text
         # word          from    genetaor
         # correction    from    grammar
-
-        word_eng_base = token.word_base
-        word_eng_countable = token.countable
-        word_eng_part = token.part
 
         if token.word_base in self.dictionary:
             word = self.dictionary[token.word_base]
@@ -103,7 +101,7 @@ def print_dictionary(lang: Language):
         if word.part is not None:
             if word.part == NOUN:
                 print(
-                    '{:<10} ({}, {}, plural: {}) means: {}'.format(
+                    '{:<10} ({}, {}, pl.: {}) means: {}'.format(
                         singular.title(),
                         PARTS_NAMES[word.part].title(),
                         GENDERS_NAMES[word.gender].title(),
@@ -128,20 +126,21 @@ def print_dictionary(lang: Language):
                         variants.append(
                             '{} ({} {})'.format(
                                 range_variant,
-                                GENDERS_NAMES[g].title(),
-                                COUNTABLE_NAMES[c].title()
+                                GENDERS_NAMES_SHORT[g],
+                                COUNTABLE_NAMES[c]
                             )
                         )
 
                 variants_text = ', '.join(variants)
                 print(
-                    '{:<10} ({}) {} means: {}'.format(
+                    '{:<10} ({}) means: {}'.format(
                         singular.title(),
                         PARTS_NAMES[word.part].title(),
-                        variants_text,
                         means.title()
                     ),
                 )
+                if variants_text:
+                    print(' '*10 + ' ' + variants_text)
         else:
             print(
                 '{:<10} means: {}'.format(
@@ -149,7 +148,7 @@ def print_dictionary(lang: Language):
                     means.title()
                 )
             )
-
+        print()
 
 def print_grammar(lang: Language):
     for p in PARTS:
