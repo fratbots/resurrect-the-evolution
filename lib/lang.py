@@ -22,18 +22,18 @@ Word = collections.namedtuple('Word', ['word_base', 'gender'])
 
 class CorrectionPreposition:
     def __init__(self):
-        pass  # create random rule
+        self.prep = random.choice(['la', 'lu', 'lo'])
 
     def apply(self, base_word: str) -> str:
-        return base_word
+        return self.prep + ' ' + base_word
 
 
 class CorrectionSuffix:
     def __init__(self):
-        pass  # create random rule
+        self.suffix = random.choice(['-ebana', '-jova', '-ben'])
 
     def apply(self, base_word: str) -> str:
-        return base_word
+        return base_word + self.suffix
 
 
 CORRECTIONS = [CorrectionPreposition, CorrectionSuffix]
