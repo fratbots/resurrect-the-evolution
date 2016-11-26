@@ -1,22 +1,20 @@
 import collections
 import re
 
-Token = collections.namedtuple('Token', ['type', 'value', 'line', 'column'])
-
 import nltk
+
+Token = collections.namedtuple('Token', ['type', 'value', 'line', 'column'])
 
 
 class Tokenizer:
-    def pos_tag(self, word):
-        return nltk.pos_tag(nltk.word_tokenize(word))
-
     def is_noun(self, word):
-        try:
-            tag = self.pos_tag(word)[0][1]
-        except IndexError:
-            return False
+        return self.__is_pos(word, 'NN')
 
-        return tag.startswith('NN')
+    def is_adjective(self, word):
+        return self.__is_pos(word, 'JJ')
+
+    def is_verb(self, word):
+        return self.__is_pos(word, 'VB')
 
     def tokenize(self, code):
         token_specification = [
@@ -37,3 +35,14 @@ class Tokenizer:
             else:
                 column = mo.start() - line_start
                 yield Token(kind, value, line_num, column)
+
+    def __is_pos(self, word, prefix):
+        try:
+            tag = self.__pos_tag(word)[0][1]
+        except IndexError:
+            return False
+
+        return tag.startswith(prefix)
+
+    def __pos_tag(self, word):
+        return nltk.pos_tag(nltk.word_tokenize(word))
