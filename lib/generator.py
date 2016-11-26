@@ -1,14 +1,13 @@
-import sys
+import hashlib
 import random
 
 
 class Generator:
-    def set_seed(self, seed):
-        random.seed(seed)
-
-    def gen_root(self):
+    def gen_root(self, orig_word):
         min_syllables = 2
         max_syllables = 4
+        rand_orig_state = random.getstate()
+        random.seed(hashlib.md5(orig_word.encode('utf-8')).digest())
         syllables_count = random.randrange(
                 min_syllables,
                 max_syllables
@@ -17,6 +16,7 @@ class Generator:
         word = []
         for i in range(syllables_count):
             word.append(syllables[random.randrange(len(syllables))])
+        random.setstate(rand_orig_state)
         return ''.join(word)
 
     def get_syllables(self,

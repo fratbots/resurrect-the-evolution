@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 
+import random
 from lib.generator import Generator
 
 
 def main():
     gen = Generator()
-    gen.set_seed("someseed")
-    print(gen.gen_root())
+    random.seed("someseed")
+    print(gen.gen_root("word_one"))
+    print(gen.gen_root("word_two"))
 
 
 if __name__ == '__main__':
