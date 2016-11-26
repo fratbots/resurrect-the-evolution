@@ -16,6 +16,9 @@ class Tokenizer:
     def is_verb(self, word):
         return self.__is_pos(word, 'VB')
 
+    def is_article(self, word):
+        return self.__is_pos(word, 'DT')
+
     def tokenize(self, code):
         token_specification = [
             ('WORD', r'\w+'),
