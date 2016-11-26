@@ -3,7 +3,6 @@
 import collections
 import random
 import re
-from pprint import pprint as pp
 
 import lib.lang
 
@@ -55,6 +54,13 @@ Fairy tales may be distinguished from other folk narratives such as legends (whi
 veracity of the events described)[1] and explicitly moral tales, including beast fables. The term is mainly used for
 stories with origins in European tradition and, at least in recent centuries, mostly relates to children's literature.
 '''
+
+
+# def print_dictionary(lang: lib.lang.Language):
+#     for eng_word_base, word in lang.dictionary:
+#         print(eng_word_base.title())
+
+
 
 if __name__ == '__main__':
     random.seed('uprt')

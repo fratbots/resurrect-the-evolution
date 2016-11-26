@@ -1,6 +1,7 @@
 import collections
 import random
 import zlib
+from lib.generator import Generator
 
 import lib.lemmatizer as lem
 
@@ -62,9 +63,11 @@ def gen(word: str):
     new_word_syllables = random.sample(syllables, (zlib.crc32(word.encode()) % 3) + 1)
     return ''.join(new_word_syllables) if len(word) > 1 else ''.join(new_word_syllables)[0]
 
+generator = Generator()
 
 def generate_new_word(word_eng_base: str):
-    return gen(word_eng_base)
+    return generator.gen_root(word_eng_base)
+    # return gen(word_eng_base)
 
 
 class Language:
