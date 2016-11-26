@@ -1,33 +1,8 @@
-import collections
 import random
 
 from lib.generator import Generator
-
-NEUTER = 0
-FEMALE = 2
-MALE = 1
-
-GENDERS = (NEUTER, FEMALE, MALE)
-GENDERS_NAMES = {
-    NEUTER: 'neuter',
-    FEMALE: 'female',
-    MALE: 'male'
-}
-
-SINGULAR = 1
-PLURAL = 2
-
-COUNTABLE = (SINGULAR, PLURAL)
-
-NOUN = 1
-VERB = 2
-ADJECTIVE = 3
-
-PARTS = (NOUN, VERB, ADJECTIVE)
-
-Trait = collections.namedtuple('Trait', ['gender', 'countable'])
-
-Word = collections.namedtuple('Word', ['word_base', 'gender'])
+from lib.tokenizer import Token
+from lib.types import *
 
 generator = Generator()
 
@@ -87,6 +62,21 @@ class Language:
                 #     Trait(gender=FEMALE, countable=PLURAL): CorrectionSuffix('esania'),
                 # }
 
+    def translate_word_token(self, token: Token) -> str:
+        word_eng_base = token.word_base
+        word_eng_countable = token.countable
+
+        if word_eng_base in self.dictionary:
+            word = self.dictionary[word_eng_base]
+        else:  # generate and save
+            new_gender = random.choice(GENDERS)
+            new_word_base = generate_new_word(word_eng_base)
+            word = Word(word_base=new_word_base, gender=new_gender)
+            self.dictionary[word_eng_base] = word
+
+        correction = self.grammar[Trait(gender=word.gender, countable=word_eng_countable)]  # countable is from text
+        return correction.apply(word.word_base)
+
     def translate(self, text_word: str) -> str:
         # countable     from    text
         # word          from    genetaor
@@ -124,7 +114,7 @@ def print_dictionary(lang: Language):
 
     for word_base, word, base_singular, base_plural in sorted(items, key=lambda t: t[2]):
         print('{:<10} {:<8} plural: {:<10}  means: {}'.format(base_singular, GENDERS_NAMES[word.gender], base_plural,
-                                                           word_base.title()))
+                                                              word_base.title()))
 
 
 def print_grammar(lang: Language):

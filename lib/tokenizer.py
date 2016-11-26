@@ -31,18 +31,11 @@ def tokenize(code):
                         line=line, column=column)
 
 
-def sentences_as_a_text(sentence):
-    result = []
-    for token in sentence:
-        result.append(token.value)
-    return ''.join(result)
-
-
 def sentences(text: str):
     sentence = []
     for token in tokenize(text):
         sentence.append(token)
-        print(token.type, token.part)
+        # print(token.type, token.part)
         if token.type == 'DOT':
             yield sentence
             sentence = []

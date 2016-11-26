@@ -1,11 +1,7 @@
 import nltk
 from nltk.stem import WordNetLemmatizer
 
-from lib.lang import ADJECTIVE
-from lib.lang import NOUN
-from lib.lang import PLURAL
-from lib.lang import SINGULAR
-from lib.lang import VERB
+from lib.types import *
 
 
 class Lemmatizer:

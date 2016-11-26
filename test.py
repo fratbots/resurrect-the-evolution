@@ -4,6 +4,7 @@ import random
 
 import lib.lang
 from lib.tokenizer import *
+from pprint import pprint as pp
 
 
 def translate(text: str, lang: lib.lang.Language) -> str:
@@ -23,6 +24,29 @@ def translate(text: str, lang: lib.lang.Language) -> str:
     return ''.join(result)
 
 
+def translate_token(token: Token) -> str:
+    if token.type == 'WORD':
+        new_word = lang.translate_word_token(token)
+        if token.value.isupper():
+            new_word = new_word.upper()
+        elif token.value.istitle():
+            new_word = new_word.title()
+        return new_word
+    else:
+        return token.value
+
+
+def translate_sentences(text: str) -> str:
+    result = []
+    for token_sentence in sentences(text):
+        # todo: base word countable
+        sentence = []
+        for token in token_sentence:
+            sentence.append(translate_token(token))
+        result.append(''.join(sentence))
+    return ''.join(result)
+
+
 # def translate_token_sentence(toke_sentence):
 
 
@@ -35,7 +59,6 @@ stories with origins in European tradition and, at least in recent centuries, mo
 This is short sentence. And very short again.
 '''
 
-
 if __name__ == '__main__':
     sd = 'uprt'
     random.seed(sd)
@@ -44,10 +67,8 @@ if __name__ == '__main__':
     lang = lib.lang.Language(sd)
 
     print(text)
-
-    for token_sentence in sentences(text):
-        print('{}\n\n'.format(sentences_as_a_text(token_sentence)))
-    exit()
+    translated_text = translate_sentences(text)
+    print(translated_text)
 
     # translated_text = translate(text, lang)
     # print(translated_text)
