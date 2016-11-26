@@ -26,3 +26,6 @@ _testmain.go
 *.prof
 
 .idea
+
+lib/__pycache__/
+
