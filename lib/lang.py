@@ -121,7 +121,7 @@ def print_dictionary(lang: Language):
         ))
 
     for word_base, word, base_singular, base_plural in sorted(items, key=lambda t: t[2]):
-        print('{:<10} {:<8} pl.: {:<10}  means: {}'.format(base_singular, GENDERS_NAMES[word.gender], base_plural,
+        print('{:<10} {:<8} plural: {:<10}  means: {}'.format(base_singular, GENDERS_NAMES[word.gender], base_plural,
                                                            word_base.title()))
 
 
@@ -129,7 +129,7 @@ def print_grammar(lang: Language):
     for g in GENDERS:
         t_single = Trait(gender=g, countable=SINGULAR)
         t_plural = Trait(gender=g, countable=PLURAL)
-        print('{:<5} -- singular: {:<10} plural: {:<10}'.format(
+        print('{:<10} singular: {:<20} plural: {:<20}'.format(
             GENDERS_NAMES[g],
             str(lang.grammar[t_single]),
             str(lang.grammar[t_plural])
