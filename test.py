@@ -56,10 +56,21 @@ stories with origins in European tradition and, at least in recent centuries, mo
 '''
 
 
-# def print_dictionary(lang: lib.lang.Language):
-#     for eng_word_base, word in lang.dictionary:
-#         print(eng_word_base.title())
+def print_dictionary(lang: lib.lang.Language):
+    genders = {
+        lib.lang.NEUTER: 'neuter',
+        lib.lang.MALE: 'male',
+        lib.lang.FEMALE: 'female',
+    }
 
+    # items = ()
+
+
+    for eng_word_base, word in sorted(lang.dictionary.items(), key=lambda t: t[0]):
+        base_singular = lang.get_word(eng_word_base, lib.lang.SINGULAR).title()
+        base_plural = lang.get_word(eng_word_base, lib.lang.PLURAL).title()
+        print('{} ({}, plural: {})\n  {} (eng)\n'.format(base_singular, genders[word.gender], base_plural,
+                                                         eng_word_base.title()))
 
 
 if __name__ == '__main__':
@@ -71,4 +82,5 @@ if __name__ == '__main__':
     print(text)
     translated_text = translate(text, lang)
     print(translated_text)
+    print_dictionary(lang)
     # pp(lang.dictionary)

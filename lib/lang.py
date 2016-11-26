@@ -91,3 +91,12 @@ class Language:
 
         correction = self.grammar[Trait(gender=word.gender, countable=word_eng_countable)]  # countable is from text
         return correction.apply(word.word_base)
+
+    def get_word(self, eng_word_base, countable):
+        word = self.dictionary.get(eng_word_base)
+        if word is None:
+            return None
+        correction = self.grammar[Trait(gender=word.gender, countable=countable)]  # countable is from text
+        return correction.apply(word.word_base)
+
+
