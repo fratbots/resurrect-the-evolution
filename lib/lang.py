@@ -5,7 +5,7 @@ from lib.types import *
 
 
 class CorrectionPreposition:
-    def __init__(self, trait: Trait):
+    def __init__(self):
         syllables = generator.get_syllables()
         self.prep = syllables[random.randrange(len(syllables))]
 
@@ -17,7 +17,7 @@ class CorrectionPreposition:
 
 
 class CorrectionSuffix:
-    def __init__(self, suffix):
+    def __init__(self):
         syllables = generator.get_syllables()
         self.suffix = syllables[random.randrange(len(syllables))]
 
@@ -28,6 +28,14 @@ class CorrectionSuffix:
         return 'word + "{}"'.format(self.suffix)
 
 
+class CorrectionNone:
+    def apply(self, base_word: str) -> str:
+        return base_word
+
+    def __str__(self):
+        return 'word as is'
+
+
 CORRECTIONS = [CorrectionPreposition, CorrectionSuffix]
 
 
@@ -35,19 +43,23 @@ class Language:
     def __init__(self):
         self.dictionary = {}  # word_base_eng => Word(word_base, gender)
         self.grammar = {}  # Trait(gender, countable) => correction
-        for g in GENDERS:
-            for c in COUNTABLE:
-                trait = Trait(gender=g, countable=c)
-                self.grammar[Trait(gender=g, countable=c)] = random.choice(CORRECTIONS)(trait)
+        for p in PARTS:
+            for g in GENDERS:
+                for c in COUNTABLE:
+                    trait = Trait(part=p, gender=g, countable=c)
+                    if p is None:
+                        self.grammar[trait] = CorrectionNone()
+                    else:
+                        self.grammar[trait] = random.choice(CORRECTIONS)()
 
-                self.grammar = {
-                    Trait(gender=NEUTER, countable=SINGULAR): CorrectionPreposition('lol'),
-                    Trait(gender=NEUTER, countable=PLURAL): CorrectionSuffix('es'),
-                    Trait(gender=MALE, countable=SINGULAR): CorrectionSuffix(''),
-                    Trait(gender=MALE, countable=PLURAL): CorrectionSuffix('esas'),
-                    Trait(gender=FEMALE, countable=SINGULAR): CorrectionPreposition('la'),
-                    Trait(gender=FEMALE, countable=PLURAL): CorrectionSuffix('esania'),
-                }
+        # self.grammar = {
+        #     Trait(gender=NEUTER, countable=SINGULAR): CorrectionPreposition('lol'),
+        #     Trait(gender=NEUTER, countable=PLURAL): CorrectionSuffix('es'),
+        #     Trait(gender=MALE, countable=SINGULAR): CorrectionSuffix(''),
+        #     Trait(gender=MALE, countable=PLURAL): CorrectionSuffix('esas'),
+        #     Trait(gender=FEMALE, countable=SINGULAR): CorrectionPreposition('la'),
+        #     Trait(gender=FEMALE, countable=PLURAL): CorrectionSuffix('esania'),
+        # }
 
     def translate_word_token(self, token: Token) -> str:
         # countable     from    text
@@ -65,7 +77,7 @@ class Language:
             word = Word(word_base=new_word_base, gender=new_gender)
             self.dictionary[word_eng_base] = word
 
-        correction = self.grammar[Trait(gender=word.gender, countable=word_eng_countable)]
+        correction = self.grammar[Trait(part=token.part, gender=word.gender, countable=word_eng_countable)]
         return correction.apply(word.word_base)
 
     def get_word(self, eng_word_base, countable):

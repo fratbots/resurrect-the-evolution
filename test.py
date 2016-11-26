@@ -54,9 +54,9 @@ if __name__ == '__main__':
     print()
 
     # grammars
-    lib.lang.print_grammar(lang)
-    print()
+    # lib.lang.print_grammar(lang)
+    # print()
 
     # dictionary
-    lib.lang.print_dictionary(lang)
-    print()
+    # lib.lang.print_dictionary(lang)
+    # print()
