@@ -88,16 +88,17 @@ class Language:
         correction = self.grammar[Trait(part=token.part, gender=word.gender, countable=token.countable)]
         return correction.apply(word.word_base)
 
-    def correct_word(self, eng_word_base, part, countable):
+    def correct_word(self, eng_word_base, part, countable, gender=None):
         word = self.dictionary.get(eng_word_base)
         if word is None:
             return None
-        correction = self.grammar[Trait(part=part, gender=word.gender, countable=countable)]
+        g = gender if gender is not None else word.gender
+        correction = self.grammar[Trait(part=part, gender=g, countable=countable)]
         return correction.apply(word.word_base)
 
 
 def print_dictionary(lang: Language):
-    items = ((k, v, lang.correct_word(k, v.part, SINGULAR).title()) for k, v in lang.dictionary.items())
+    items = ((k, v, lang.correct_word(k, v.part, SINGULAR)) for k, v in lang.dictionary.items())
     for means, word, singular in sorted(items, key=lambda t: t[2]):
         if word.part is not None:
             if word.part == NOUN:
@@ -107,14 +108,37 @@ def print_dictionary(lang: Language):
                         PARTS_NAMES[word.part].title(),
                         GENDERS_NAMES[word.gender].title(),
                         lang.correct_word(means, word.part, PLURAL),
-                        means
+                        means.title()
                     ),
                 )
             else:
+                # Work     (Verb) means: Work (f. -en, m. -el, n. as is)
+                variants = []
+                if word.part in (ADJECTIVE, VERB):
+                    ranges = [
+                        (NEUTER, SINGULAR),
+                        (FEMALE, SINGULAR),
+                        (FEMALE, PLURAL),
+                        (MALE, PLURAL),
+                    ]
+                    for g, c in ranges:
+                        range_variant = lang.correct_word(means, word.part, c, g)
+                        if range_variant == singular:
+                            continue
+                        variants.append(
+                            '{} ({} {})'.format(
+                                range_variant,
+                                GENDERS_NAMES[g].title(),
+                                COUNTABLE_NAMES[c].title()
+                            )
+                        )
+
+                variants_text = ', '.join(variants)
                 print(
-                    '{:<10} ({}) means: {}'.format(
+                    '{:<10} ({}) {} means: {}'.format(
                         singular.title(),
                         PARTS_NAMES[word.part].title(),
+                        variants_text,
                         means.title()
                     ),
                 )

@@ -15,6 +15,10 @@ SINGULAR = 1
 PLURAL = 2
 
 COUNTABLE = (SINGULAR, PLURAL)
+COUNTABLE_NAMES = {
+    SINGULAR: 'singular',
+    PLURAL: 'plural'
+}
 
 NOUN = 1
 VERB = 2
