@@ -72,12 +72,12 @@ def print_dictionary(lang: lib.lang.Language):
         print('{} ({}, plural: {})\n  {} (eng)\n'.format(base_singular, genders[word.gender], base_plural,
                                                          eng_word_base.title()))
 
-
 if __name__ == '__main__':
-    random.seed('uprt')
+    sd = 'uprt'
+    random.seed(sd)
 
     # new language based on seed
-    lang = lib.lang.Language()
+    lang = lib.lang.Language(sd)
 
     print(text)
     translated_text = translate(text, lang)
