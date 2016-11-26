@@ -52,15 +52,6 @@ class Language:
                     correction = CorrectionNone() if non_corrected_part else random.choice(CORRECTIONS)()
                     self.grammar[trait] = correction
 
-                    # self.grammar = {
-                    #     Trait(gender=NEUTER, countable=SINGULAR): CorrectionPreposition('lol'),
-                    #     Trait(gender=NEUTER, countable=PLURAL): CorrectionSuffix('es'),
-                    #     Trait(gender=MALE, countable=SINGULAR): CorrectionSuffix(''),
-                    #     Trait(gender=MALE, countable=PLURAL): CorrectionSuffix('esas'),
-                    #     Trait(gender=FEMALE, countable=SINGULAR): CorrectionPreposition('la'),
-                    #     Trait(gender=FEMALE, countable=PLURAL): CorrectionSuffix('esania'),
-                    # }
-
     def generate_root(self, word_eng_base, part) -> str:
         if word_eng_base in self.dictionary:
             return self.dictionary[word_eng_base].word_base
@@ -110,7 +101,6 @@ def print_dictionary(lang: Language):
                     ),
                 )
             else:
-                # Work     (Verb) means: Work (f. -en, m. -el, n. as is)
                 variants = []
                 if word.part in (ADJECTIVE, VERB):
                     ranges = [
@@ -130,8 +120,6 @@ def print_dictionary(lang: Language):
                                 COUNTABLE_NAMES[c]
                             )
                         )
-
-                variants_text = ', '.join(variants)
                 print(
                     '{:<10} ({}) means: {}'.format(
                         singular.title(),
@@ -139,8 +127,8 @@ def print_dictionary(lang: Language):
                         means.title()
                     ),
                 )
-                if variants_text:
-                    print(' '*10 + ' ' + variants_text)
+                if variants:
+                    print(' ' * 10 + ' ' + ', '.join(variants))
         else:
             print(
                 '{:<10} means: {}'.format(
@@ -149,6 +137,7 @@ def print_dictionary(lang: Language):
                 )
             )
         print()
+
 
 def print_grammar(lang: Language):
     for p in PARTS:
