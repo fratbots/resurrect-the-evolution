@@ -29,3 +29,6 @@ class Generator:
                 result.append('%s%s' % (v, c))
                 result.append('%s%s' % (c, v))
         return result
+
+
+generator = Generator()

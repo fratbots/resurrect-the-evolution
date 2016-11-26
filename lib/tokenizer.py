@@ -1,9 +1,7 @@
-import collections
 import re
 
 from lib.lemmatizer import lemmatizer
-
-Token = collections.namedtuple('Token', ['type', 'value', 'countable', 'part', 'word_base', 'line', 'column'])
+from lib.types import Token
 
 
 def tokenize(code):
@@ -35,7 +33,6 @@ def sentences(text: str):
     sentence = []
     for token in tokenize(text):
         sentence.append(token)
-        # print(token.type, token.part)
         if token.type == 'DOT':
             yield sentence
             sentence = []

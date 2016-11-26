@@ -25,3 +25,5 @@ PARTS = (NOUN, VERB, ADJECTIVE)
 Trait = collections.namedtuple('Trait', ['gender', 'countable'])
 
 Word = collections.namedtuple('Word', ['word_base', 'gender'])
+
+Token = collections.namedtuple('Token', ['type', 'value', 'countable', 'part', 'word_base', 'line', 'column'])
