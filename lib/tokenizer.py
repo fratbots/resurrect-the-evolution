@@ -16,7 +16,7 @@ class Tokenizer:
         except IndexError:
             return False
 
-        return tag == 'NN' or tag == 'NNS'
+        return tag.startswith('NN')
 
     def tokenize(self, code):
         token_specification = [
