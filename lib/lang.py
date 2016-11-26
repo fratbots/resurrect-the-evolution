@@ -1,9 +1,8 @@
 import collections
 import random
-import hashlib
-from lib.generator import Generator
 
 import lib.lemmatizer as lem
+from lib.generator import Generator
 
 NEUTER = 0
 FEMALE = 2
@@ -16,7 +15,6 @@ GENDERS_NAMES = {
     MALE: 'male'
 }
 
-
 SINGULAR = 1
 PLURAL = 2
 
@@ -27,6 +25,7 @@ Trait = collections.namedtuple('Trait', ['gender', 'countable'])
 Word = collections.namedtuple('Word', ['word_base', 'gender'])
 
 generator = Generator()
+
 
 class CorrectionPreposition:
     def __init__(self, trait: Trait):
@@ -63,7 +62,6 @@ def determine_text_word(text_word: str) -> (int, str):
     return word_eng_countable, word_eng_base
 
 
-
 def generate_new_word(word_eng_base: str):
     return generator.gen_root(word_eng_base)
     # return gen(word_eng_base)
@@ -78,16 +76,19 @@ class Language:
                 trait = Trait(gender=g, countable=c)
                 self.grammar[Trait(gender=g, countable=c)] = random.choice(CORRECTIONS)(trait)
 
-        # self.grammar = {
-        #     Trait(gender=NEUTER, countable=SINGULAR): CorrectionPreposition('lol'),
-        #     Trait(gender=NEUTER, countable=PLURAL): CorrectionSuffix('es'),
-        #     Trait(gender=MALE, countable=SINGULAR): CorrectionSuffix(''),
-        #     Trait(gender=MALE, countable=PLURAL): CorrectionSuffix('esas'),
-        #     Trait(gender=FEMALE, countable=SINGULAR): CorrectionPreposition('la'),
-        #     Trait(gender=FEMALE, countable=PLURAL): CorrectionSuffix('esania'),
-        # }
+                # self.grammar = {
+                #     Trait(gender=NEUTER, countable=SINGULAR): CorrectionPreposition('lol'),
+                #     Trait(gender=NEUTER, countable=PLURAL): CorrectionSuffix('es'),
+                #     Trait(gender=MALE, countable=SINGULAR): CorrectionSuffix(''),
+                #     Trait(gender=MALE, countable=PLURAL): CorrectionSuffix('esas'),
+                #     Trait(gender=FEMALE, countable=SINGULAR): CorrectionPreposition('la'),
+                #     Trait(gender=FEMALE, countable=PLURAL): CorrectionSuffix('esania'),
+                # }
 
     def translate(self, text_word: str) -> str:
+        # countable     from    text
+        # word          from    genetaor
+        # coreection    from    grammar
         word_eng_countable, word_eng_base = determine_text_word(text_word)
 
         if word_eng_base in self.dictionary:
@@ -109,3 +110,27 @@ class Language:
         return correction.apply(word.word_base)
 
 
+def print_dictionary(lang: Language):
+    items = []
+    for word_base, word in lang.dictionary.items():
+        items.append((
+            word_base,
+            word,
+            lang.get_word(word_base, SINGULAR).title(),
+            lang.get_word(word_base, PLURAL).title()
+        ))
+
+    for word_base, word, base_singular, base_plural in sorted(items, key=lambda t: t[2]):
+        print('{:<10} {:<8} pl.: {:<10}  means: {}'.format(base_singular, GENDERS_NAMES[word.gender], base_plural,
+                                                           word_base.title()))
+
+
+def print_grammar(lang: Language):
+    for g in GENDERS:
+        t_single = Trait(gender=g, countable=SINGULAR)
+        t_plural = Trait(gender=g, countable=PLURAL)
+        print('{:<5} -- singular: {:<10} plural: {:<10}'.format(
+            GENDERS_NAMES[g],
+            str(lang.grammar[t_single]),
+            str(lang.grammar[t_plural])
+        ))
