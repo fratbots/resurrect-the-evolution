@@ -1,5 +1,8 @@
 import collections
 import random
+import zlib
+
+import lib.lemmatizer as lem
 
 NEUTER = 0
 FEMALE = 2
@@ -22,7 +25,7 @@ class CorrectionPreposition:
         pass  # create random rule
 
     def apply(self, base_word: str) -> str:
-        pass
+        return base_word
 
 
 class CorrectionSuffix:
@@ -30,20 +33,38 @@ class CorrectionSuffix:
         pass  # create random rule
 
     def apply(self, base_word: str) -> str:
-        pass
+        return base_word
 
 
 CORRECTIONS = [CorrectionPreposition, CorrectionSuffix]
 
+lemmatizer = lem.Lemmatizer()
 
-def determine_text_word(word: str) -> (int, str):
-    word_eng_countable = PLURAL
-    word_eng_base = 'wowowowow'
+
+def determine_text_word(text_word: str) -> (int, str):
+    lem_countable, word_eng_base = lemmatizer.get_countable_and_base(text_word)
+    word_eng_countable = PLURAL if lem_countable == lem.PLURAL else SINGULAR
     return word_eng_countable, word_eng_base
 
 
+def gen(word: str):
+    syllables = [
+        'la',
+        'ko',
+        'pep',
+        'qwu',
+        'e',
+        'plo',
+        'kuo',
+    ]
+
+    # random.seed('uprt' + word)
+    new_word_syllables = random.sample(syllables, (zlib.crc32(word.encode()) % 3) + 1)
+    return ''.join(new_word_syllables) if len(word) > 1 else ''.join(new_word_syllables)[0]
+
+
 def generate_new_word(word_eng_base: str):
-    return 'new_word_base'
+    return gen(word_eng_base)
 
 
 class Language:
@@ -55,16 +76,14 @@ class Language:
                 self.grammar[Trait(gender=g, countable=c)] = random.choice(CORRECTIONS)()
 
     def translate(self, text_word: str) -> str:
-        word_eng_countable = PLURAL  # TODO determine by
-        word_eng_base = 'asdf'  # for a key
+        word_eng_countable, word_eng_base = determine_text_word(text_word)
 
         if word_eng_base in self.dictionary:
             word = self.dictionary[word_eng_base]
-
         else:  # generate and save
-            gender = random.choice(GENDERS)
-            word_base = 'asdfasdf'  # todo: generator.generate(word_eng_base)
-            word = Word(word_base=word_base, gender=gender)
+            new_gender = random.choice(GENDERS)
+            new_word_base = generate_new_word(word_eng_base)
+            word = Word(word_base=new_word_base, gender=new_gender)
             self.dictionary[word_eng_base] = word
 
         correction = self.grammar[Trait(gender=word.gender, countable=word_eng_countable)]  # countable is from text

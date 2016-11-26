@@ -3,27 +3,11 @@
 import collections
 import random
 import re
-import zlib
 from pprint import pprint as pp
 
+import lib.lang
+
 Token = collections.namedtuple('Token', ['type', 'value', 'line', 'column'])
-
-
-
-def gen(word: str):
-    syllables = [
-        'la',
-        'ko',
-        'pep',
-        'qwu',
-        'e',
-        'plo',
-        'kuo',
-    ]
-
-    # random.seed('uprt' + word)
-    new_word_syllables = random.sample(syllables, (zlib.crc32(word.encode()) % 3) + 1)
-    return ''.join(new_word_syllables)
 
 
 def tokenize(code):
@@ -47,16 +31,12 @@ def tokenize(code):
             yield Token(kind, value, line_num, column)
 
 
-def translate(text: str) -> str:
+def translate(text: str, lang: lib.lang.Language) -> str:
     result = []
-    words = {}
     for token in tokenize(text):
         if token.type == 'WORD':
             word = token.value
-            if word in words:
-                new_word = words[word]
-            else:
-                new_word = gen(word.lower())
+            new_word = lang.translate(word)
             if word.isupper():
                 new_word = new_word.upper()
             elif word.istitle():
@@ -65,7 +45,7 @@ def translate(text: str) -> str:
         else:
             result.append(token.value)
 
-    return ''.join(result), words
+    return ''.join(result)
 
 
 text = '''
@@ -78,7 +58,11 @@ stories with origins in European tradition and, at least in recent centuries, mo
 
 if __name__ == '__main__':
     random.seed('uprt')
+
+    # new language based on seed
+    lang = lib.lang.Language()
+
     print(text)
-    translated_text, words = translate(text)
+    translated_text = translate(text, lang)
     print(translated_text)
-    pp(words)
+    # pp(lang.dictionary)
