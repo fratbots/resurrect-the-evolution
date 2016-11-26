@@ -1,7 +1,6 @@
 import collections
 import random
 
-import lib.lemmatizer as lem
 from lib.generator import Generator
 
 NEUTER = 0
@@ -19,6 +18,12 @@ SINGULAR = 1
 PLURAL = 2
 
 COUNTABLE = (SINGULAR, PLURAL)
+
+NOUN = 1
+VERB = 2
+ADJECTIVE = 3
+
+PARTS = (NOUN, VERB, ADJECTIVE)
 
 Trait = collections.namedtuple('Trait', ['gender', 'countable'])
 
@@ -53,12 +58,9 @@ class CorrectionSuffix:
 
 CORRECTIONS = [CorrectionPreposition, CorrectionSuffix]
 
-lemmatizer = lem.Lemmatizer()
-
 
 def determine_text_word(text_word: str) -> (int, str):
-    lem_countable, word_eng_base = lemmatizer.get_countable_and_base(text_word)
-    word_eng_countable = PLURAL if lem_countable == lem.PLURAL else SINGULAR
+    # word_eng_countable, word_eng_part, word_eng_base = lemmatizer.get_countable_and_base(text_word)
     return word_eng_countable, word_eng_base
 
 

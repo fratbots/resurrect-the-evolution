@@ -1,12 +1,11 @@
-""" 
-nltk.download('wordnet')
-
-"""
-
+import nltk
 from nltk.stem import WordNetLemmatizer
 
-SINGULAR = 1
-PLURAL = 2
+from lib.lang import ADJECTIVE
+from lib.lang import NOUN
+from lib.lang import PLURAL
+from lib.lang import SINGULAR
+from lib.lang import VERB
 
 
 class Lemmatizer:
@@ -16,4 +15,21 @@ class Lemmatizer:
     def get_countable_and_base(self, word):
         lemma = self.wnl.lemmatize(word, 'n')
         plural = PLURAL if word is not lemma else SINGULAR
-        return plural, lemma
+        part_tuple = nltk.pos_tag(nltk.word_tokenize(word))
+        try:
+            part = part_tuple[0][1]
+            if part.startswith('NN'):
+                part = NOUN
+            elif part.startswith('VB'):
+                part = VERB
+            elif part.startswith('JJ'):
+                part = ADJECTIVE
+            else:
+                part = None
+        except IndexError:
+            part = None
+
+        return plural, part, lemma
+
+
+lemmatizer = Lemmatizer()

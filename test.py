@@ -36,7 +36,6 @@ This is short sentence. And very short again.
 '''
 
 
-
 if __name__ == '__main__':
     sd = 'uprt'
     random.seed(sd)
@@ -46,12 +45,12 @@ if __name__ == '__main__':
 
     print(text)
 
-    # for token_sentence in sentences(text):
-    #     print('{}\n\n'.format(sentences_as_a_text(token_sentence)))
-    # exit()
+    for token_sentence in sentences(text):
+        print('{}\n\n'.format(sentences_as_a_text(token_sentence)))
+    exit()
 
-    translated_text = translate(text, lang)
-    print(translated_text)
+    # translated_text = translate(text, lang)
+    # print(translated_text)
     lib.lang.print_grammar(lang)
     print()
     lib.lang.print_dictionary(lang)
