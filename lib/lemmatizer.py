@@ -20,6 +20,10 @@ class Lemmatizer:
                 part = VERB
             elif part.startswith('JJ'):
                 part = ADJECTIVE
+            elif part.startswith('IN'):
+                part = PREPOSITION
+            elif part.startswith('DT'):
+                part = ARTICLE
             else:
                 part = None
         except IndexError:

@@ -48,7 +48,8 @@ class Language:
             for g in GENDERS:
                 for c in COUNTABLE:
                     trait = Trait(part=p, gender=g, countable=c)
-                    correction = CorrectionNone() if p is None else random.choice(CORRECTIONS)()
+                    non_corrected_part = p in (ARTICLE, PREPOSITION, None)
+                    correction = CorrectionNone() if non_corrected_part else random.choice(CORRECTIONS)()
                     self.grammar[trait] = correction
 
                     # self.grammar = {
@@ -60,9 +61,9 @@ class Language:
                     #     Trait(gender=FEMALE, countable=PLURAL): CorrectionSuffix('esania'),
                     # }
 
-    def generate_root(self, word_eng_base):
+    def generate_root(self, word_eng_base, part):
         while True:
-            new_root = self.generator.gen_root(word_eng_base)
+            new_root = self.generator.gen_root(word_eng_base, part)
             if new_root in (word.word_base for _, word in self.dictionary.items()):
                 continue
             return new_root
@@ -74,16 +75,17 @@ class Language:
 
         word_eng_base = token.word_base
         word_eng_countable = token.countable
+        word_eng_part = token.part
 
-        if word_eng_base in self.dictionary:
-            word = self.dictionary[word_eng_base]
+        if token.word_base in self.dictionary:
+            word = self.dictionary[token.word_base]
         else:
             new_gender = random.choice(GENDERS)
-            new_word_base = self.generate_root(word_eng_base)
+            new_word_base = self.generate_root(token.word_base, token.part)
             word = Word(part=token.part, word_base=new_word_base, gender=new_gender)
-            self.dictionary[word_eng_base] = word
+            self.dictionary[token.word_base] = word
 
-        correction = self.grammar[Trait(part=token.part, gender=word.gender, countable=word_eng_countable)]
+        correction = self.grammar[Trait(part=token.part, gender=word.gender, countable=token.countable)]
         return correction.apply(word.word_base)
 
     def correct_word(self, eng_word_base, part, countable):

@@ -19,12 +19,16 @@ COUNTABLE = (SINGULAR, PLURAL)
 NOUN = 1
 VERB = 2
 ADJECTIVE = 3
+PREPOSITION = 4
+ARTICLE = 5
 
-PARTS = (NOUN, VERB, ADJECTIVE, None)
+PARTS = (NOUN, VERB, ADJECTIVE, PREPOSITION, ARTICLE, None)
 PARTS_NAMES = {
     NOUN: 'Noun',
     VERB: 'Verb',
     ADJECTIVE: 'Adjective',
+    PREPOSITION: 'Preposition',
+    ARTICLE: 'Article',
     None: 'Others'
 }
 

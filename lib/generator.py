@@ -1,11 +1,15 @@
 import hashlib
 import random
+from lib.types import *
 
 
 class Generator:
-    def gen_root(self, orig_word):
+    def gen_root(self, orig_word, part):
         min_syllables = 2
         max_syllables = 4
+        if part in (ARTICLE, PREPOSITION):
+            min_syllables = 1
+            max_syllables = 3
         rand_orig_state = random.getstate()
         random.seed(hashlib.md5(orig_word.encode('utf-8')).digest())
         syllables_count = random.randrange(
