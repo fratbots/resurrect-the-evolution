@@ -4,6 +4,7 @@ import collections
 import random
 import re
 
+
 import lib.lang
 
 Token = collections.namedtuple('Token', ['type', 'value', 'line', 'column'])
@@ -63,14 +64,28 @@ def print_dictionary(lang: lib.lang.Language):
         lib.lang.FEMALE: 'female',
     }
 
-    # items = ()
+    items = []
+    for eng_word_base, word in lang.dictionary.items():
+        items.append(
+            (
+                eng_word_base,
+                word,
+                lang.get_word(eng_word_base, lib.lang.SINGULAR).title(),
+                lang.get_word(eng_word_base, lib.lang.PLURAL).title()
+            )
+        )
 
-
-    for eng_word_base, word in sorted(lang.dictionary.items(), key=lambda t: t[0]):
-        base_singular = lang.get_word(eng_word_base, lib.lang.SINGULAR).title()
-        base_plural = lang.get_word(eng_word_base, lib.lang.PLURAL).title()
+    for eng_word_base, word, base_singular, base_plural in sorted(items, key=lambda t: t[2]):
         print('{} ({}, plural: {})\n  {} (eng)\n'.format(base_singular, genders[word.gender], base_plural,
                                                          eng_word_base.title()))
+
+
+
+def print_grammar(lang: lib.lang.Language):
+    for g in lib.lang.GENDERS:
+        t_single = lib.lang.Trait(gender=g, countable=lib.lang.SINGULAR)
+        t_plural = lib.lang.Trait(gender=g, countable=lib.lang.PLURAL)
+        print('{} -- singular: {} plural: {}'.format(lib.lang.GENDERS_NAMES[g], lang.grammar[t_single], lang.grammar[t_plural]))
 
 if __name__ == '__main__':
     sd = 'uprt'
@@ -83,4 +98,5 @@ if __name__ == '__main__':
     translated_text = translate(text, lang)
     print(translated_text)
     print_dictionary(lang)
+    print_grammar(lang)
     # pp(lang.dictionary)
