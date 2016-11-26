@@ -1,6 +1,7 @@
 import random
 
 from lib.generator import generator
+from lib.tokenizer import sentences
 from lib.types import *
 
 
@@ -9,11 +10,11 @@ class CorrectionPreposition:
         syllables = generator.get_syllables()
         self.prep = syllables[random.randrange(len(syllables))]
 
-    def apply(self, base_word: str) -> str:
-        return self.prep + ' ' + base_word
-
     def __str__(self):
         return '"{} " + word'.format(self.prep)
+
+    def apply(self, base_word: str) -> str:
+        return self.prep + ' ' + base_word
 
 
 class CorrectionSuffix:
@@ -21,11 +22,11 @@ class CorrectionSuffix:
         syllables = generator.get_syllables()
         self.suffix = syllables[random.randrange(len(syllables))]
 
-    def apply(self, base_word: str) -> str:
-        return base_word + self.suffix
-
     def __str__(self):
         return 'word + "{}"'.format(self.suffix)
+
+    def apply(self, base_word: str) -> str:
+        return base_word + self.suffix
 
 
 class CorrectionNone:
@@ -61,6 +62,14 @@ class Language:
                 continue
             return new_root
 
+    def correct_word(self, eng_word_base, part, countable, gender=None):
+        word = self.dictionary.get(eng_word_base)
+        if word is None:
+            return None
+        g = gender if gender is not None else word.gender
+        correction = self.grammar[Trait(part=part, gender=g, countable=countable)]
+        return correction.apply(word.word_base)
+
     def translate_word_token(self, token: Token) -> str:
         # countable     from    text
         # word          from    genetaor
@@ -77,26 +86,40 @@ class Language:
         correction = self.grammar[Trait(part=token.part, gender=word.gender, countable=token.countable)]
         return correction.apply(word.word_base)
 
-    def correct_word(self, eng_word_base, part, countable, gender=None):
-        word = self.dictionary.get(eng_word_base)
-        if word is None:
-            return None
-        g = gender if gender is not None else word.gender
-        correction = self.grammar[Trait(part=part, gender=g, countable=countable)]
-        return correction.apply(word.word_base)
+    def translate_token(self, token: Token) -> str:
+        if token.type == 'WORD':
+            new_word = self.translate_word_token(token)
+            if token.value.isupper():
+                new_word = new_word.upper()
+            elif token.value.istitle():
+                new_word = new_word.title()
+            return new_word
+        else:
+            return token.value
+
+    def translate(self, text):
+        result = []
+        for token_sentence in sentences(text):
+            # todo: base word countable
+            sentence = []
+            for token in token_sentence:
+                sentence.append(self.translate_token(token))
+            result.append(''.join(sentence))
+        return ''.join(result)
 
 
-def print_dictionary(lang: Language):
+def print_dictionary(lang: Language) -> str:
+    result = []
     items = ((k, v, lang.correct_word(k, v.part, SINGULAR)) for k, v in lang.dictionary.items())
     for means, word, singular in sorted(items, key=lambda t: t[2]):
         if word.part is not None:
             if word.part == NOUN:
-                print(
+                result.append(
                     '{:<10} ({}, {}, pl.: {}) means: {}'.format(
                         singular.title(),
                         PARTS_NAMES[word.part].title(),
                         GENDERS_NAMES[word.gender].title(),
-                        lang.correct_word(means, word.part, PLURAL),
+                        lang.correct_word(means, word.part, PLURAL).title(),
                         means.title()
                     ),
                 )
@@ -120,7 +143,7 @@ def print_dictionary(lang: Language):
                                 COUNTABLE_NAMES[c]
                             )
                         )
-                print(
+                result.append(
                     '{:<10} ({}) means: {}'.format(
                         singular.title(),
                         PARTS_NAMES[word.part].title(),
@@ -128,26 +151,30 @@ def print_dictionary(lang: Language):
                     ),
                 )
                 if variants:
-                    print(' ' * 10 + ' ' + ', '.join(variants))
+                    result.append(' ' * 10 + ' ' + ', '.join(variants))
         else:
-            print(
+            result.append(
                 '{:<10} means: {}'.format(
                     singular.title(),
                     means.title()
                 )
             )
-        print()
+        result.append('')
+
+    return "\n".join(result)
 
 
 def print_grammar(lang: Language):
+    result = []
     for p in PARTS:
-        print(PARTS_NAMES[p])
+        result.append(PARTS_NAMES[p])
         for g in GENDERS:
             t_single = Trait(part=p, gender=g, countable=SINGULAR)
             t_plural = Trait(part=p, gender=g, countable=PLURAL)
-            print('{:<10} singular: {:<20} plural: {:<20}'.format(
+            result.append('{:<10} singular: {:<20} plural: {:<20}'.format(
                 GENDERS_NAMES[g],
                 str(lang.grammar[t_single]),
                 str(lang.grammar[t_plural])
             ))
-        print()
+        result.append('')
+    return "\n".join(result)
