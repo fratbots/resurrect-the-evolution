@@ -72,7 +72,34 @@
 ## EN
 
 We conducted thought experiment that lasted for two days.
-How do you think the end of the world will look like?
+We some kind of invented a metagame.
+
+How do you think, what would be the end of humanity? We thought of one of possibilities.
+For the last two days we dove into the world similar to Aldous Huxley' or George Orwell's worlds.
+
+A colony of people tries to survive on foreign planet far far away from the Earth.
+Biological diversity guaranteed by genetic material brought from homeplanet.
+The offspring is healthy and ready to bring new generations.
+
+But. Very narrow cultural environment, limited circles of communication and uniformity
+of education and opinions of the people around entail to serious social problems.
+People don't want to develop themselves. Crime is rising. Psychological problems appear.
+Culture does not progress. A lot of evolution mechanisms stopped.
+
+Metagame offers to dive to the problems of brave new world and to save humanity.
+All you need to do -- is to resurrect the evolution.
+
+Our solution to the problem is to recreate basic mechanisms of cultural diversity.
+We propose to take strong measures to resettle different groups of people
+to different areas for a long-long time. It is necessary to restrict communication
+between those groups.
+
+We focused on one of the tools which can help to restore diversity in human
+languages. To achieve this, we created a generator of self-sufficient languages.
+Resettled groups of people should speak different languages.
+
+Tool demonstration: language generation, orphographic dictionary, grammar,
+abc, explanatory dictionary.
 
 
 $ setup
