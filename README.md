@@ -49,4 +49,4 @@ python3
 >>> nltk.download('wordnet')
 >>> nltk.download('averaged_perceptron_tagger')
 >>> nltk.download('tagsets')
-
+>>> nltk.download('punkt')
