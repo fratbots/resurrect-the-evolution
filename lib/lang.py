@@ -1,6 +1,6 @@
 import collections
 import random
-import zlib
+import hashlib
 from lib.generator import Generator
 
 import lib.lemmatizer as lem
@@ -22,16 +22,34 @@ Word = collections.namedtuple('Word', ['word_base', 'gender'])
 
 
 class CorrectionPreposition:
-    def __init__(self):
-        self.prep = random.choice(['la', 'lu', 'lo'])
+    def __init__(self, seed):
+        gen = Generator()
+        syllables = gen.get_syllables()
+        rand_orig_state = random.getstate()
+        preps = []
+        for i in range(3):
+            sd = hashlib.md5(("%s%d" % (seed, i)).encode('utf-8')).digest()
+            random.seed(sd)
+            preps.append(syllables[random.randrange(len(syllables))])
+        self.prep = random.choice(preps)
+        random.setstate(rand_orig_state)
 
     def apply(self, base_word: str) -> str:
         return self.prep + ' ' + base_word
 
 
 class CorrectionSuffix:
-    def __init__(self):
-        self.suffix = random.choice(['-ebana', '-jova', '-ben'])
+    def __init__(self, seed):
+        gen = Generator()
+        syllables = gen.get_syllables()
+        rand_orig_state = random.getstate()
+        suffs = []
+        for i in range(3):
+            sd = hashlib.md5(("%s%d" % (seed, i)).encode('utf-8')).digest()
+            random.seed(sd)
+            suffs.append(syllables[random.randrange(len(syllables))])
+        self.suffix = random.choice(suffs)
+        random.setstate(rand_orig_state)
 
     def apply(self, base_word: str) -> str:
         return base_word + self.suffix
@@ -48,21 +66,6 @@ def determine_text_word(text_word: str) -> (int, str):
     return word_eng_countable, word_eng_base
 
 
-def gen(word: str):
-    syllables = [
-        'la',
-        'ko',
-        'pep',
-        'qwu',
-        'e',
-        'plo',
-        'kuo',
-    ]
-
-    # random.seed('uprt' + word)
-    new_word_syllables = random.sample(syllables, (zlib.crc32(word.encode()) % 3) + 1)
-    return ''.join(new_word_syllables) if len(word) > 1 else ''.join(new_word_syllables)[0]
-
 generator = Generator()
 
 def generate_new_word(word_eng_base: str):
@@ -71,12 +74,12 @@ def generate_new_word(word_eng_base: str):
 
 
 class Language:
-    def __init__(self):
+    def __init__(self, seed):
         self.dictionary = {}  # word_base_eng => Word(word_base, gender)
         self.grammar = {}  # Trait(gender, countable) => correction
         for g in GENDERS:
             for c in COUNTABLE:
-                self.grammar[Trait(gender=g, countable=c)] = random.choice(CORRECTIONS)()
+                self.grammar[Trait(gender=g, countable=c)] = random.choice(CORRECTIONS)(seed)
 
     def translate(self, text_word: str) -> str:
         word_eng_countable, word_eng_base = determine_text_word(text_word)

@@ -61,12 +61,12 @@ stories with origins in European tradition and, at least in recent centuries, mo
 #         print(eng_word_base.title())
 
 
-
 if __name__ == '__main__':
-    random.seed('uprt')
+    sd = 'uprt'
+    random.seed(sd)
 
     # new language based on seed
-    lang = lib.lang.Language()
+    lang = lib.lang.Language(sd)
 
     print(text)
     translated_text = translate(text, lang)
