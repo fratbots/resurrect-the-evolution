@@ -40,3 +40,13 @@
 ## EN
 
 TBD
+
+
+$ setup
+pip3 install nltk
+python3
+>>> nltk
+>>> nltk.download('wordnet')
+>>> nltk.download('averaged_perceptron_tagger')
+>>> nltk.download('tagsets')
+

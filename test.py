@@ -3,12 +3,13 @@
 import random
 
 import lib.lang
-from lib.tokenizer import *
+from lib.tokenizer import Tokenizer
 
+tokenizer = Tokenizer()
 
 def translate(text: str, lang: lib.lang.Language) -> str:
     result = []
-    for token in tokenize(text):
+    for token in tokenizer.tokenize(text):
         if token.type == 'WORD':
             word = token.value
             new_word = lang.translate(word)
@@ -30,7 +31,6 @@ Fairy tales may be distinguished from other folk narratives such as legends (whi
 veracity of the events described) and explicitly moral tales, including beast fables. The term is mainly used for
 stories with origins in European tradition and, at least in recent centuries, mostly relates to children's literature.
 '''
-
 
 
 if __name__ == '__main__':

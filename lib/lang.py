@@ -3,6 +3,7 @@ import random
 
 import lib.lemmatizer as lem
 from lib.generator import Generator
+from lib.tokenizer import Tokenizer
 
 NEUTER = 0
 FEMALE = 2
@@ -22,9 +23,10 @@ COUNTABLE = (SINGULAR, PLURAL)
 
 Trait = collections.namedtuple('Trait', ['gender', 'countable'])
 
-Word = collections.namedtuple('Word', ['word_base', 'gender'])
+Word = collections.namedtuple('Word', ['word_base', 'gender', 'is_noun'])
 
 generator = Generator()
+tokenizer = Tokenizer()
 
 
 class CorrectionPreposition:
@@ -93,36 +95,53 @@ class Language:
 
         if word_eng_base in self.dictionary:
             word = self.dictionary[word_eng_base]
-        else:  # generate and save
+        elif tokenizer.is_noun(word_eng_base):  # generate and save
             new_gender = random.choice(GENDERS)
             new_word_base = generate_new_word(word_eng_base)
-            word = Word(word_base=new_word_base, gender=new_gender)
+            word = Word(word_base=new_word_base, gender=new_gender, is_noun=True)
             self.dictionary[word_eng_base] = word
+        else:
+            new_word_base = generate_new_word(word_eng_base)
+            word = Word(word_base=new_word_base, gender=None, is_noun=False)
+            self.dictionary[word_eng_base] = word
+            return new_word_base
 
-        correction = self.grammar[Trait(gender=word.gender, countable=word_eng_countable)]  # countable is from text
-        return correction.apply(word.word_base)
+        if tokenizer.is_noun(word_eng_base):
+            correction = self.grammar[Trait(gender=word.gender, countable=word_eng_countable)]  # countable is from text
+            return correction.apply(word.word_base)
+        else:
+            return word.word_base
 
     def get_word(self, eng_word_base, countable):
         word = self.dictionary.get(eng_word_base)
         if word is None:
             return None
+        if not word.is_noun:
+            return word.word_base
+
         correction = self.grammar[Trait(gender=word.gender, countable=countable)]  # countable is from text
         return correction.apply(word.word_base)
 
 
 def print_dictionary(lang: Language):
     items = []
-    for word_base, word in lang.dictionary.items():
-        items.append((
-            word_base,
-            word,
-            lang.get_word(word_base, SINGULAR).title(),
-            lang.get_word(word_base, PLURAL).title()
-        ))
+    for eng_word_base, word in lang.dictionary.items():
+        items.append(
+            (
+                eng_word_base,
+                word,
+                word.is_noun,
+                lang.get_word(eng_word_base, SINGULAR).title(),
+                lang.get_word(eng_word_base, PLURAL).title()
+            )
+        )
 
-    for word_base, word, base_singular, base_plural in sorted(items, key=lambda t: t[2]):
-        print('{:<10} {:<8} pl.: {:<10}  means: {}'.format(base_singular, GENDERS_NAMES[word.gender], base_plural,
-                                                           word_base.title()))
+    for word_base, word, is_noun, base_singular, base_plural in sorted(items, key=lambda t: t[2]):
+        if is_noun:
+            print('{:<10} {:<8} pl.: {:<10}  means: {}'.format(base_singular, GENDERS_NAMES[word.gender], base_plural,
+                                                               word_base.title()))
+        else:
+            print('{} means:  {}'.format(base_singular, word_base.title()))
 
 
 def print_grammar(lang: Language):
