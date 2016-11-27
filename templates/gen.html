@@ -4,7 +4,8 @@
     <style>
         body{padding:50px;}
         #gen_form{margin-bottom:50px;}
-        #results div{margin-bottom:30px;}
+        #gen_form textarea{width:100%;}
+        #results div{margin-bottom:50px;}
     </style>
 </head>
 <body>
@@ -14,12 +15,12 @@
             <p id="row_lang_name">
                 <label for="inp_lang_name">Language name</label>
                 <br />
-                <input id="inp_lang_name" type="text" name="lang_name" value="{{ lang_name }}" />
+                <input id="inp_lang_name" type="text" name="lang_name" value="{{ lang_name|safe }}" />
             </p>
             <p>
                 <label for="inp_input_text">Text to translate</label>
                 <br />
-                <textarea id="inp_input_text" name="input_text">{{ input_text }}</textarea>
+                <textarea id="inp_input_text" name="input_text" rows="15">{{ input_text|safe }}</textarea>
             </p>
             <p>
                 <input type="submit" value="Create language" />
@@ -31,7 +32,7 @@
             <div id="translated">
                 <h2>Translation</h2>
                 <div>
-                    {{ translated|safe }}
+                    {{ translated|safe|nl2br }}
                 </div>
             </div>
             <div id="grammar">
