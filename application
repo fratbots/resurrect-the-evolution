@@ -3,5 +3,5 @@ def application(environ, start_response):
     path = '/opt/repo/ROOT'
     if path not in sys.path:
         sys.path.append(path)
-    from .web import app
-    app(environ)
+    from web import app
+    return app(environ, start_response)
