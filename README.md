@@ -66,8 +66,6 @@ abc, explanatory dictionary.
 
 ## Features
 
-using part of speech: noun, verb, adjectives, preposition, articles
-
 - Language basement generation:
     - Grammar (using part of speech: noun, verb, adjectives, preposition, articles)
     - ABC from custom word list
