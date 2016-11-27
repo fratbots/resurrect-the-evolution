@@ -3,6 +3,8 @@
     <title>Resurrect the Evolution</title>
     <style>
         body{padding:50px;}
+        #gen_form{margin-bottom:50px;}
+        #results div{margin-bottom:30px;}
     </style>
 </head>
 <body>
@@ -24,4 +26,22 @@
             </p>
         </form>
     </div>
+    {% if translated %}
+        <div id="results">
+            <div id="translated">
+                <h2>Translation</h2>
+                <div>
+                    {{ translated|safe }}
+                </div>
+            </div>
+            <div id="grammar">
+                <h2>Grammar</h2>
+                <div>{{ grammar|safe|nl2br }}</div>
+            </div>
+            <div id="orpho_dictionary">
+                <h2>Dictionary</h2>
+                <div>{{ orpho_dictionary|safe|nl2br }}</div>
+            </div>
+        </div>
+    {% endif %}
 </body>

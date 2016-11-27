@@ -85,7 +85,7 @@ abc, explanatory dictionary.
 
     $ pip3 install nltk
     python3
-    >>> nltk
+    >>> import nltk
     >>> nltk.download('wordnet')
     >>> nltk.download('averaged_perceptron_tagger')
     >>> nltk.download('tagsets')
