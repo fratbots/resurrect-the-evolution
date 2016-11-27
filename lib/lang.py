@@ -1,6 +1,7 @@
 import random
 
 from lib.generator import generator
+from lib.lemmatizer import lemmatizer
 from lib.tokenizer import sentences
 from lib.types import *
 
@@ -56,14 +57,22 @@ class Language:
     def get_alphabet(self):
         return self.generator.get_alphabet()
 
-    def generate_root(self, word_eng_base, part) -> str:
+    def generate_root(self, word_eng_base, part, letter=None) -> str:
         if word_eng_base in self.dictionary:
             return self.dictionary[word_eng_base].word_base
         while True:
             new_root = self.generator.gen_root(word_eng_base, part)
+            if letter is not None:
+                new_root = letter + new_root
             if new_root in (word.word_base for _, word in self.dictionary.items()):
                 continue
             return new_root
+
+    def generate_root_for_abc(self, word_eng_base, letter=None) -> (int, str, int):
+        countable, part, eng_word_base = lemmatizer.get_countable_and_base(word_eng_base)
+        new_word_base = self.generate_root(word_eng_base, part, letter)
+        new_gender = random.choice(GENDERS)
+        return part, new_word_base, new_gender, countable, eng_word_base
 
     def correct_word(self, eng_word_base, part, countable, gender=None):
         word = self.dictionary.get(eng_word_base)
@@ -72,6 +81,14 @@ class Language:
         g = gender if gender is not None else word.gender
         correction = self.grammar[Trait(part=part, gender=g, countable=countable)]
         return correction.apply(word.word_base)
+
+    def translate_abc_word(self, letter: str, eng_words: list) -> str:
+        eng_word = eng_words.pop(0)
+        new_part, new_word_base, new_gender, new_countable, eng_word_base = self.generate_root_for_abc(eng_word, letter)
+        word = Word(part=new_part, word_base=new_word_base, gender=new_gender)
+        self.dictionary[eng_word_base] = word
+        correction = self.grammar[Trait(part=word.part, gender=word.gender, countable=new_countable)]
+        return correction.apply(word.word_base), eng_word_base
 
     def translate_word_token(self, token: Token) -> str:
         # countable     from    text
@@ -86,7 +103,7 @@ class Language:
             word = Word(part=token.part, word_base=new_word_base, gender=new_gender)
             self.dictionary[token.word_base] = word
 
-        correction = self.grammar[Trait(part=token.part, gender=word.gender, countable=token.countable)]
+        correction = self.grammar[Trait(part=word.part, gender=word.gender, countable=token.countable)]
         return correction.apply(word.word_base)
 
     def translate_token(self, token: Token) -> str:
@@ -111,57 +128,64 @@ class Language:
         return ''.join(result)
 
 
+def print_dictionary_word(lang, means, word, singular):
+    result = []
+    if word.part is not None:
+        if word.part == NOUN:
+            result.append(
+                '{:<10} ({}, {}, pl.: {}) means: {}'.format(
+                    singular.title(),
+                    PARTS_NAMES[word.part].title(),
+                    GENDERS_NAMES[word.gender].title(),
+                    lang.correct_word(means, word.part, PLURAL).title(),
+                    means.title()
+                ),
+            )
+        else:
+            variants = []
+            if word.part in (ADJECTIVE, VERB):
+                ranges = [
+                    (NEUTER, SINGULAR),
+                    (FEMALE, SINGULAR),
+                    (FEMALE, PLURAL),
+                    (MALE, PLURAL),
+                ]
+                for g, c in ranges:
+                    range_variant = lang.correct_word(means, word.part, c, g)
+                    if range_variant == singular:
+                        continue
+                    variants.append(
+                        '{} ({} {})'.format(
+                            range_variant,
+                            GENDERS_NAMES_SHORT[g],
+                            COUNTABLE_NAMES[c]
+                        )
+                    )
+            result.append(
+                '{:<10} ({}) means: {}'.format(
+                    singular.title(),
+                    PARTS_NAMES[word.part].title(),
+                    means.title()
+                ),
+            )
+            if variants:
+                result.append(' ' * 10 + ' ' + ', '.join(variants))
+    else:
+        result.append(
+            '{:<10} means: {}'.format(
+                singular.title(),
+                means.title()
+            )
+        )
+
+    return "\n".join(result)
+
+
 def print_dictionary(lang: Language) -> str:
     result = []
     items = ((k, v, lang.correct_word(k, v.part, SINGULAR)) for k, v in lang.dictionary.items())
     for means, word, singular in sorted(items, key=lambda t: t[2]):
-        if word.part is not None:
-            if word.part == NOUN:
-                result.append(
-                    '{:<10} ({}, {}, pl.: {}) means: {}'.format(
-                        singular.title(),
-                        PARTS_NAMES[word.part].title(),
-                        GENDERS_NAMES[word.gender].title(),
-                        lang.correct_word(means, word.part, PLURAL).title(),
-                        means.title()
-                    ),
-                )
-            else:
-                variants = []
-                if word.part in (ADJECTIVE, VERB):
-                    ranges = [
-                        (NEUTER, SINGULAR),
-                        (FEMALE, SINGULAR),
-                        (FEMALE, PLURAL),
-                        (MALE, PLURAL),
-                    ]
-                    for g, c in ranges:
-                        range_variant = lang.correct_word(means, word.part, c, g)
-                        if range_variant == singular:
-                            continue
-                        variants.append(
-                            '{} ({} {})'.format(
-                                range_variant,
-                                GENDERS_NAMES_SHORT[g],
-                                COUNTABLE_NAMES[c]
-                            )
-                        )
-                result.append(
-                    '{:<10} ({}) means: {}'.format(
-                        singular.title(),
-                        PARTS_NAMES[word.part].title(),
-                        means.title()
-                    ),
-                )
-                if variants:
-                    result.append(' ' * 10 + ' ' + ', '.join(variants))
-        else:
-            result.append(
-                '{:<10} means: {}'.format(
-                    singular.title(),
-                    means.title()
-                )
-            )
+        result.append(print_dictionary_word(lang, means, word, singular))
         result.append('')
 
     return "\n".join(result)
@@ -180,4 +204,18 @@ def print_grammar(lang: Language):
                 str(lang.grammar[t_plural])
             ))
         result.append('')
+    return "\n".join(result)
+
+
+def print_abc(lang: Language, alphabet: str, alphabet_words: list):
+    result = []
+    for letter in list(alphabet):
+        new_word, eng_word_base = lang.translate_abc_word(letter, alphabet_words)
+        word = lang.dictionary[eng_word_base]
+        singular = lang.correct_word(eng_word_base, word.part, SINGULAR)
+
+        result.append('[ {} ]'.format(letter.upper()))
+        result.append(print_dictionary_word(lang, eng_word_base, word, singular))
+        result.append('')
+
     return "\n".join(result)
