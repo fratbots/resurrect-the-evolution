@@ -53,6 +53,9 @@ class Language:
                     correction = CorrectionNone() if non_corrected_part else random.choice(CORRECTIONS)()
                     self.grammar[trait] = correction
 
+    def get_alphabet(self):
+        return self.generator.get_alphabet()
+
     def generate_root(self, word_eng_base, part) -> str:
         if word_eng_base in self.dictionary:
             return self.dictionary[word_eng_base].word_base

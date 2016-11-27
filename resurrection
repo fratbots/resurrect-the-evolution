@@ -14,7 +14,8 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    if len(args.abc.split(':', 2)) < 2:
+    abc_filenames = args.abc.split(':', 2)
+    if len(abc_filenames) < 2:
         print('--abc argument is not valid')
         exit()
 
@@ -26,4 +27,4 @@ if __name__ == '__main__':
             exit()
         text_filenames.append(filenames)
 
-    run(args.name, args.grammar, args.abc, args.dict, text_filenames)
+    run(args.name, args.grammar, args.dict, abc_filenames, text_filenames)
