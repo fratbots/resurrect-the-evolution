@@ -8,6 +8,8 @@ class Generator:
     vowels = 'euioa'
     consonants = 'rtpsdfghklzvbnm'
 
+    CACHE = []
+
     def get_alphabet(self) -> str:
         return self.vowels + self.consonants
 
@@ -31,14 +33,17 @@ class Generator:
         return ''.join(word)
 
     def get_syllables(self, vowels=None, consonants=None):
-        vowels = vowels if vowels else self.vowels
-        consonants = consonants if consonants else self.consonants
-        result = []
-        for v in vowels:
-            for c in consonants:
-                result.append('%s%s' % (v, c))
-                result.append('%s%s' % (c, v))
-        return result
+        if not self.CACHE:
+            vowels = vowels if vowels else self.vowels
+            consonants = consonants if consonants else self.consonants
+            result = []
+            for v in vowels:
+                for c in consonants:
+                    result.append('%s%s' % (v, c))
+                    result.append('%s%s' % (c, v))
+            random.shuffle(result)
+            self.CACHE = result
+        return self.CACHE
 
 
 generator = Generator()
