@@ -1,13 +1,18 @@
 <!doctype html>
 <head>
     <title>Resurrect the Evolution</title>
+    <link rel="stylesheet" href="https://yui-s.yahooapis.com/pure/0.6.0/base-min.css">
     <style>
         body{padding:50px;}
         header{margin-bottom:20px;}
         header a{display:inline-block;margin-right:10px;}
+        h1{font-family:"American Typewriter",serif;font-weight:normal;}
+        label{display:inline-block;margin-bottom:5px;}
         #gen_form{margin-bottom:50px;}
         #gen_form textarea{width:100%;}
         #results div{margin-bottom:50px;}
+        #inp_submit{padding:8px 30px;font-size:18px;}
+        .inp_text{padding:5px;font-size:18px;}
     </style>
 </head>
 <body>
@@ -21,15 +26,15 @@
             <p id="row_lang_name">
                 <label for="inp_lang_name">Language name</label>
                 <br />
-                <input id="inp_lang_name" type="text" name="lang_name" value="{{ lang_name|safe }}" />
+                <input class="inp_text" id="inp_lang_name" type="text" name="lang_name" value="{{ lang_name|safe }}" />
             </p>
             <p>
                 <label for="inp_input_text">Text to translate</label>
                 <br />
-                <textarea id="inp_input_text" name="input_text" rows="15">{{ input_text|safe }}</textarea>
+                <textarea id="inp_input_text" class="inp_text" name="input_text" rows="15">{{ input_text|safe }}</textarea>
             </p>
             <p>
-                <input type="submit" value="Create language" />
+                <input id="inp_submit" type="submit" value="Create language" />
             </p>
         </form>
     </div>
