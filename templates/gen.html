@@ -1,0 +1,27 @@
+<!doctype html>
+<head>
+    <title>Resurrect the Evolution</title>
+    <style>
+        body{padding:50px;}
+    </style>
+</head>
+<body>
+    <h1>Resurrect the Evolution</h1>
+    <div id="gen_form">
+        <form action="" method="post">
+            <p id="row_lang_name">
+                <label for="inp_lang_name">Language name</label>
+                <br />
+                <input id="inp_lang_name" type="text" name="lang_name" value="{{ lang_name }}" />
+            </p>
+            <p>
+                <label for="inp_input_text">Text to translate</label>
+                <br />
+                <textarea id="inp_input_text">{{ input_text }}</textarea>
+            </p>
+            <p>
+                <input type="submit" value="Create language" />
+            </p>
+        </form>
+    </div>
+</body>
