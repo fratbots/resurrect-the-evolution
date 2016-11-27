@@ -9,4 +9,3 @@ all:
 		--text \
 		    "./text/sentence.txt:./build/${LANG}-sentence.txt" \
 		    "./text/little-red-riding-hood.txt:./build/${LANG}-little-red-riding-hood.txt" \
-		    "./text/story.txt:./build/${LANG}-story.txt"

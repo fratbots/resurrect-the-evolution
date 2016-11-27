@@ -12,16 +12,19 @@ def run(name: str, grammar_file: str, dict_file: str, abc_filenames: list, text_
 
     language = Language(generator)
 
-    alphabet = language.get_alphabet()
-    alphabet_words = []
-    with open(abc_filenames[0]) as input:
-        content = input.readlines()
-        for word in content:
-            alphabet_words.append(word.strip().lower())
+    # abc
+    if abc_filenames is not None:
+        alphabet = language.get_alphabet()
+        alphabet_words = []
+        with open(abc_filenames[0]) as input:
+            content = input.readlines()
+            for word in content:
+                alphabet_words.append(word.strip().lower())
 
-    with open(abc_filenames[1], 'w') as output:
-        output.write(print_abc(language, alphabet, alphabet_words))
+        with open(abc_filenames[1], 'w') as output:
+            output.write(print_abc(language, alphabet, alphabet_words))
 
+    # texts
     for input_filename, output_filename in text_filenames:
         with open(input_filename) as input:
             with open(output_filename, 'w') as output:
@@ -29,8 +32,10 @@ def run(name: str, grammar_file: str, dict_file: str, abc_filenames: list, text_
                 translated = language.translate(text)
                 output.write(translated)
 
+    # grammar
     with open(grammar_file, 'w') as output:
         output.write(print_grammar(language))
 
+    # dictionary
     with open(dict_file, 'w') as output:
         output.write(print_dictionary(language))

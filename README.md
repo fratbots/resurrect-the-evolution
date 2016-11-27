@@ -64,6 +64,24 @@ Resettled groups of people should speak different languages.
 Tool demonstration: language generation, orphographic dictionary, grammar,
 abc, explanatory dictionary.
 
+## Features
+
+using part of speech: noun, verb, adjectives, preposition, articles
+
+- Language basement generation:
+    - Grammar (using part of speech: noun, verb, adjectives, preposition, articles)
+    - ABC from custom word list
+    - Dictionary for all made up words during text translations
+- Text translation any number of text at a time (see Makefile)
+- Repetition of generation depends on name of new language
+
+
+# How to use
+
+- Come up a new language name
+- Put togather texts for translation in English
+- Use resurrection tool (see examples in Makefile)
+
 
 ## How to install dependencies
 

@@ -9,15 +9,17 @@ if __name__ == '__main__':
     parser.add_argument('--name', type=str, help='Language name', required=True)
     parser.add_argument('--grammar', type=str, help='Grammar file name', required=True)
     parser.add_argument('--dict', type=str, help='Dictionary file name', required=True)
-    parser.add_argument('--abc', type=str, help='ABC file name (input_file:output_file)', required=True)
+    parser.add_argument('--abc', type=str, help='ABC file name (input_file:output_file)')
     parser.add_argument('--text', type=str, nargs='+', help='Any text file (input_file:output_file)', required=True)
 
     args = parser.parse_args()
 
-    abc_filenames = args.abc.split(':', 2)
-    if len(abc_filenames) < 2:
-        print('--abc argument is not valid')
-        exit()
+    abc_filenames = None
+    if args.abc:
+        abc_filenames = args.abc.split(':', 2)
+        if len(abc_filenames) < 2:
+            print('--abc argument is not valid')
+            exit()
 
     text_filenames = []
     for names in args.text:

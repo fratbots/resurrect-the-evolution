@@ -1,0 +1,29 @@
+Noun
+neuter     singular: word + "fo"          plural: word + "ap"         
+female     singular: "il " + word         plural: word + "im"         
+male       singular: "fu " + word         plural: word + "mo"         
+
+Verb
+neuter     singular: "fo " + word         plural: "uh " + word        
+female     singular: "en " + word         plural: "di " + word        
+male       singular: word + "hi"          plural: "ba " + word        
+
+Adjective
+neuter     singular: word + "up"          plural: word + "vi"         
+female     singular: "di " + word         plural: word + "in"         
+male       singular: word + "az"          plural: "im " + word        
+
+Preposition
+neuter     singular: word as is           plural: word as is          
+female     singular: word as is           plural: word as is          
+male       singular: word as is           plural: word as is          
+
+Article
+neuter     singular: word as is           plural: word as is          
+female     singular: word as is           plural: word as is          
+male       singular: word as is           plural: word as is          
+
+Others
+neuter     singular: word as is           plural: word as is          
+female     singular: word as is           plural: word as is          
+male       singular: word as is           plural: word as is          
