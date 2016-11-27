@@ -1,17 +1,17 @@
 Noun
-neuter     singular: word + "fo"          plural: word + "ap"         
-female     singular: "il " + word         plural: word + "im"         
-male       singular: "fu " + word         plural: word + "mo"         
+neuter     singular: word + "ub"          plural: "ga " + word        
+female     singular: word + "be"          plural: "fe " + word        
+male       singular: "od " + word         plural: "ib " + word        
 
 Verb
-neuter     singular: "fo " + word         plural: "uh " + word        
-female     singular: "en " + word         plural: "di " + word        
-male       singular: word + "hi"          plural: "ba " + word        
+neuter     singular: "as " + word         plural: "al " + word        
+female     singular: word + "af"          plural: "lu " + word        
+male       singular: word + "ba"          plural: "ep " + word        
 
 Adjective
-neuter     singular: word + "up"          plural: word + "vi"         
-female     singular: "di " + word         plural: word + "in"         
-male       singular: word + "az"          plural: "im " + word        
+neuter     singular: "os " + word         plural: word + "be"         
+female     singular: "na " + word         plural: "ke " + word        
+male       singular: "et " + word         plural: "ku " + word        
 
 Preposition
 neuter     singular: word as is           plural: word as is          

@@ -1,60 +1,60 @@
 [ E ]
-Il Enuortu (Noun, Female, pl.: Enuortuim) means: Resurrection
+Od Eibsata (Noun, Male, pl.: Ib Eibsata) means: Resurrection
 
 [ U ]
-Fu Uzenuof (Noun, Male, pl.: Uzenuofmo) means: Armageddon
+Od Uheibof (Noun, Male, pl.: Ib Uheibof) means: Armageddon
 
 [ I ]
-Fu Ivobu   (Noun, Male, pl.: Ivobumo) means: Catastrophe
+Iifnabe    (Noun, Female, pl.: Fe Iifna) means: Catastrophe
 
 [ O ]
-Ofoagakfo  (Noun, Neuter, pl.: Ofoagakap) means: Revelation
+Od Oakgeku (Noun, Male, pl.: Ib Oakgeku) means: Revelation
 
 [ A ]
-Il Adoimra (Noun, Female, pl.: Adoimraim) means: Disclosure
+Od Aarufza (Noun, Male, pl.: Ib Aarufza) means: Disclosure
 
 [ R ]
-Rlozoodfo  (Noun, Neuter, pl.: Rlozoodap) means: Cataclysm
+Rabhatebe  (Noun, Female, pl.: Fe Rabhate) means: Cataclysm
 
 [ T ]
-Fu Takipba (Noun, Male, pl.: Takipbamo) means: Vision
+Tkuasilub  (Noun, Neuter, pl.: Ga Tkuasil) means: Vision
 
 [ P ]
-Fu Pukakse (Noun, Male, pl.: Pukaksemo) means: Revealment
+Pzokuomub  (Noun, Neuter, pl.: Ga Pzokuom) means: Revealment
 
 [ S ]
-Il Sizez   (Noun, Female, pl.: Sizezim) means: Prophecy
+Sroivub    (Noun, Neuter, pl.: Ga Sroiv) means: Prophecy
 
 [ D ]
-Dozmorifo  (Noun, Neuter, pl.: Dozmoriap) means: Discovery
+Od Dukhomi (Noun, Male, pl.: Ib Dukhomi) means: Discovery
 
 [ F ]
-Fduavunfo  (Noun, Neuter, pl.: Fduavunap) means: Inspiration
+Ffeetsebe  (Noun, Female, pl.: Fe Ffeetse) means: Inspiration
 
 [ G ]
-Gazetfo    (Noun, Neuter, pl.: Gazetap) means: Exposure
+Od Gosuz   (Noun, Male, pl.: Ib Gosuz) means: Exposure
 
 [ H ]
-Il Hsaipud (Noun, Female, pl.: Hsaipudim) means: Manifestation
+Hotaslobe  (Noun, Female, pl.: Fe Hotaslo) means: Manifestation
 
 [ K ]
-Il Kmoar   (Noun, Female, pl.: Kmoarim) means: Epiphany
+Khoagbe    (Noun, Female, pl.: Fe Khoag) means: Epiphany
 
 [ L ]
-Fu Lvokaar (Noun, Male, pl.: Lvokaarmo) means: Annihilation
+Od Lifmaag (Noun, Male, pl.: Ib Lifmaag) means: Annihilation
 
 [ Z ]
-En Zohviol (Verb) means: Unmasking
-           fo zohviol (neuter s.), di zohviol (fem. pl.), ba zohviol (male pl.)
+Znodefiaf  (Verb) means: Unmasking
+           as znodefi (neuter s.), lu znodefi (fem. pl.), ep znodefi (male pl.)
 
 [ V ]
-Vzogoemfo  (Noun, Neuter, pl.: Vzogoemap) means: Prognostication
+Od Vhaihpi (Noun, Male, pl.: Ib Vhaihpi) means: Prognostication
 
 [ B ]
-Bilanfo    (Noun, Neuter, pl.: Bilanap) means: Apparition
+Od Bobnu   (Noun, Male, pl.: Ib Bobnu) means: Apparition
 
 [ N ]
-Nbodafo    (Noun, Neuter, pl.: Nbodaap) means: Destruction
+Od Nguhi   (Noun, Male, pl.: Ib Nguhi) means: Destruction
 
 [ M ]
-Fu Muzak   (Noun, Male, pl.: Muzakmo) means: Disaster
+Od Misku   (Noun, Male, pl.: Ib Misku) means: Disaster
